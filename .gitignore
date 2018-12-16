@@ -1,0 +1,5 @@
+fdf
+*.dSYM
+*/*.a
+libft/libft_object_files/*
+
