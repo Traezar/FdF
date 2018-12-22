@@ -12,15 +12,14 @@
 
 OBJ = *.o
 
-fdfSRC = 
-			 check/shared_util.c check/stdout_msg.c
+fdfSRC = fdf.c
 
-fdfHDR = includes
+fdfHDR = includes/fdf.h
 
-all: LIBFT fdf
+all:  LIBFT fdf
 
 fdf:
-	@gcc -o push_swap $(CFLAGS) $(fdfSRC) -I $(fdfHDR) -L libft -lft -g
+	@gcc -o push_swap $(CFLAGS) $(fdfSRC) -I $(fdfHDR) -lmlx  -lXext -lX11  -lft -L libft -L minilibx -L /usr/X11/lib
 	@echo "\033[1;32m[Compiled]\033[0m: \033[1;36m./pushswap\033[0m"
 
 LIBFT :
