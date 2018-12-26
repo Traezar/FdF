@@ -12,15 +12,15 @@
 
 OBJ = *.o
 
-fdfSRC = fdf.c
+fdfSRC = src/fdf.c src/line.c src/map_builder.c
 
 fdfHDR = includes/fdf.h
 
 all:  LIBFT fdf
 
 fdf:
-	@gcc -o push_swap $(CFLAGS) $(fdfSRC) -I $(fdfHDR) -lmlx  -lXext -lX11  -lft -L libft -L minilibx -L /usr/X11/lib
-	@echo "\033[1;32m[Compiled]\033[0m: \033[1;36m./pushswap\033[0m"
+	@gcc -o fdf $(CFLAGS) $(fdfSRC) -I $(fdfHDR) -lmlx -framework OpenGL -framework AppKit  -lft -L libft -L minilibx_macos
+	@echo "\033[1;32m[Compiled]\033[0m: \033[1;36m./fdf\033[0m"
 
 LIBFT :
 	@cd libft && make
