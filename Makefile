@@ -19,7 +19,7 @@ fdfHDR = includes/fdf.h
 all:  LIBFT fdf
 
 fdf:
-	@gcc -o fdf $(CFLAGS) $(fdfSRC) -I $(fdfHDR) -lmlx -framework OpenGL -framework AppKit  -lft -L libft -L minilibx_macos
+	@gcc -o fdf $(CFLAGS) $(fdfSRC) -I $(fdfHDR) -lmlx -framework OpenGL -framework AppKit  -lft -L libft -L minilibx_macos -g
 	@echo "\033[1;32m[Compiled]\033[0m: \033[1;36m./fdf\033[0m"
 
 LIBFT :

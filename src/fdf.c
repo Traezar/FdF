@@ -16,11 +16,21 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+t_map *set_origin (void)
+{
+	t_map *origin;
+
+	origin = malloc(sizeof(t_map));
+	origin->cart.x = 500;
+	origin->cart.y = 500;
+	origin->iso.x = xiso_convert(500, 500, 1);
+	origin->iso.y = xiso_convert(500, 500, 1);
+	return (origin);
+}
 int main (int ac, char **av)
 {
 	int fd;
 	t_gui gui;
-	char *map;
 	t_map *dot_map;
 
 	if(ac != 2)
@@ -34,7 +44,9 @@ int main (int ac, char **av)
 		gui.mlx = mlx_init();
 		if (gui.mlx != NULL)
 			gui.win = mlx_new_window(gui.mlx, 1000, 1000, "FDF");
-		dot_map = process_map(fd, &map);
+		gui.origin = set_origin();
+		dot_map = process_map(fd);
+		ft_printf("dot_map created\n");
 		lineate(dot_map, gui);
 		mlx_loop(gui.mlx);
 	}
@@ -42,18 +54,21 @@ int main (int ac, char **av)
 }
 
 
+
 void lineate(t_map *dot_map, t_gui gui)
 {
   t_map *current;
   t_map *previous;
-	current = NULL;
-	previous = NULL;
 
+	current = gui.origin;
+	previous = NULL;
+	ft_printf("Entered lineate\n");
   while(dot_map!= NULL)
   {
 		previous = current;
 		current = dot_map;
-		if(previous != NULL)
-		drawline_previous_to_current(previous,current ,gui);
+		drawline_bresenham(previous,current ,gui);
+		dot_map = dot_map->next;
   }
+	return;
 }

@@ -13,22 +13,20 @@
 #include "../libft/includes/libft.h"
 #include <math.h>
 #include <fcntl.h>
+#include <stdio.h>
 #include "../minilibx_macos/mlx.h"
 
-#define xorigin 100
-#define yorigin 100
+#define xorigin 500
+#define yorigin 500
 #define START_IMAGE  100
-typedef struct s_gui
-{
-  void *mlx;
-  void *win;
-} t_gui;
+#define offset 200
+
 
  typedef struct s_point
  {
-  double x;
-  double y;
-  double z;
+  float x;
+  float y;
+  float z;
  } t_point;
 
  typedef struct s_line
@@ -39,8 +37,8 @@ typedef struct s_gui
 
 typedef struct s_iso
 {
-  double x;
-  double y;
+  float x;
+  float y;
 } t_iso;
 
 typedef struct s_map
@@ -50,13 +48,24 @@ typedef struct s_map
   struct s_map *next;
 } t_map;
 
+typedef struct s_gui
+{
+  void *mlx;
+  void *win;
+  t_map *origin;
+} t_gui;
+
+
 /*fdf.c*/
 void lineate(t_map *dot_map, t_gui gui);
+t_map *set_origin (void);
 /*map_builder.c*/
-t_map *process_map(int fd, char **map);
+t_map *process_map(int fd);
+void reverse_list(t_map **head_ref);
 void push_new_map(int row, int column,int magnitude, t_map **map);
-double xiso_convert(double x,double  y,double z);
-double yiso_convert(double x,double  y,double z);
+int xiso_convert(float x,float  y,float z);
+int yiso_convert(float x,float  y,float z);
 
 /*line.c*/
-void drawline_previous_to_current(t_map *start, t_map *end, t_gui gui);
+void drawline_bresenham(t_map *start, t_map *end, t_gui gui);
+void drawline (t_gui gui);
