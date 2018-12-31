@@ -28,24 +28,13 @@ void drawline_bresenham(t_map *start, t_map *end, t_gui gui)
 
   dx = x1 - x0;
   dy = y1 - y0;
-
-  if (dy < 0)
-  {
-    dy = -dy;
-    stepy = -1;
-  }
-  else
-    stepy = 1;
-  if (dx < 0)
-  {
-    dx = -dx;
-    stepx = -1;
-  }
-  else
-    stepx = 1;
+  stepy = (dy < 0) ? -1 : 1;
+  stepx = (dx < 0) ? -1 : 1;
+  dy = (dy < 0) ? -dy : dy;
+  dx = (dx < 0) ? -dx : dx;
   dy = dy << 1;
   dx = dx << 1;
-  if((0 <= x0) && (x0 < 1000) && (0 <= y0) && (y0 < 1000))
+  if((0 <= x0) && (x0 < 5000) && (0 <= y0) && (y0 < 5000))
       mlx_pixel_put(gui.mlx, gui.win, x0, y0, 0xFFFFFF);
   if (dx > dy)
   {
@@ -59,7 +48,7 @@ void drawline_bresenham(t_map *start, t_map *end, t_gui gui)
         fraction -= dx;
       }
       fraction += dy;
-      if((0 <= x0) && (x0 < 1000) && (0 <= y0) && (y0 < 1000))
+      if((0 <= x0) && (x0 < 5000) && (0 <= y0) && (y0 < 5000))
           mlx_pixel_put(gui.mlx, gui.win, x0, y0, 0xFFFFFF);
     }
   }
@@ -75,25 +64,25 @@ void drawline_bresenham(t_map *start, t_map *end, t_gui gui)
       }
       y0 += stepy;
       fraction += dx;
-      if((0 <= x0) && (x0 < 1000) && (0 <= y0) && (y0 < 1000))
+      if((0 <= x0) && (x0 < 5000) && (0 <= y0) && (y0 < 5000))
           mlx_pixel_put(gui.mlx, gui.win, x0, y0, 0xFFFFFF);
     }
   }
 }
 
-int xiso_convert(float x,float y,float z)
+int xiso_convert(float x,float y,float z, t_map *origin)
 {
 	int xcart;
 
-	(void)y;
-	xcart = round((x-z)*(cos(0.523599)));
-	return (xcart+xorigin);
+  (void)z;
+	xcart = (x + y) * cos(0.523599);
+	return (xcart+ origin->iso.x);
 }
 
-int yiso_convert(float x, float y, float z)
+int yiso_convert(float x, float y, float z, t_map *origin)
 {
 	int y_cart;
 
-	y_cart = round((y + ((x+z)*(sin(0.523599)))));
-	return (yorigin - y_cart);
+	y_cart = ((x - y) * sin(0.523599) + z);
+	return (origin->iso.y - y_cart);
 }

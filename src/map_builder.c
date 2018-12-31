@@ -14,7 +14,7 @@
 #include "../includes/fdf.h"
 #include "../minilibx_macos/mlx.h"
 
-t_map *process_map(int fd)
+t_map *process_map_horizontal_lines(int fd, t_map *origin)
 {
 	char **coor;
   int row;
@@ -30,15 +30,15 @@ t_map *process_map(int fd)
 	map = NULL;
 	while(get_next_line(fd, &line))
 	{
-		ft_printf("%s\n", line);
     coor = ft_strsplit(line, ' ');
-		ft_printf("passed strsplit\n");
 		while(coor[count] != NULL)
 		{
-			push_new_map(row ,column,ft_atoi(coor[count++]), &map);
+			push_new_map(column ,row,ft_atoi(coor[count++]), &map);
+			map->origin = origin;
+			map->iso.x = xiso_convert(column, row, map->cart.z, map->origin);
+			map->iso.y = yiso_convert(column, row, map->cart.z, map->origin);
 			column += offset;
 		}
-		ft_printf("pushed first row\n");
 		count = 0;
     row += offset;
 		column = 0;
@@ -46,6 +46,17 @@ t_map *process_map(int fd)
 	reverse_list(&map);
 	return map;
 }
+
+t_map **process_map_vertical_lines(t_map *dot_map)
+{
+	int column;
+	t_map **ret;
+
+	column = get_columns(dot_map);
+	ret = map_vertical(column, dot_map);
+	return (ret);
+}
+
 
 void reverse_list(t_map **head_ref)
 {
@@ -69,18 +80,15 @@ void reverse_list(t_map **head_ref)
 	*head_ref = previous;
 }
 
-void push_new_map(int row, int column,int magnitude, t_map **map)
+void push_new_map(int column, int row,int magnitude, t_map **map)
 {
   t_map *new;
 
   new = malloc(sizeof(t_map));
-  new->cart.x = row;
-  new->cart.y = column;
-  new->cart.z = magnitude;
-	new->iso.x = xiso_convert(row, column, magnitude);
-	printf("The value of isox:%f\n", new->iso.x);
-	new->iso.y = yiso_convert(row, column, magnitude);
-	printf("The value of isoy:%f\n", new->iso.y);
+  new->cart.x = column;
+  new->cart.y = row;
+  new->cart.z = magnitude * 10;
   new->next = *map;
+	new->below = NULL;
   *map = new;
 }
