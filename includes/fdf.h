@@ -19,7 +19,7 @@
 #define xorigin 500
 #define yorigin 500
 #define START_IMAGE  100
-#define offset 200
+#define offset 50
 
 
  typedef struct s_point
@@ -45,27 +45,39 @@ typedef struct s_map
 {
   t_point cart;
   t_iso iso;
+  struct s_map *origin;
   struct s_map *next;
+  struct s_map *below;
+
 } t_map;
 
 typedef struct s_gui
 {
   void *mlx;
   void *win;
-  t_map *origin;
+  struct s_map *origin;
 } t_gui;
 
 
 /*fdf.c*/
-void lineate(t_map *dot_map, t_gui gui);
+void lineate_horizontal(t_map *dot_map, t_gui gui);
+void lineate_vertical(t_map **vertical, t_gui gui);
 t_map *set_origin (void);
 /*map_builder.c*/
-t_map *process_map(int fd);
+t_map *process_map_horizontal_lines(int fd, t_map *origin);
+t_map **process_map_vertical_lines(t_map *dot_map);
 void reverse_list(t_map **head_ref);
-void push_new_map(int row, int column,int magnitude, t_map **map);
-int xiso_convert(float x,float  y,float z);
-int yiso_convert(float x,float  y,float z);
+void push_new_map(int column, int row,int magnitude, t_map **map);
+int xiso_convert(float x,float  y,float z, t_map *origin);
+int yiso_convert(float x,float  y,float z, t_map *origin);
 
 /*line.c*/
 void drawline_bresenham(t_map *start, t_map *end, t_gui gui);
 void drawline (t_gui gui);
+
+/*builder_util*/
+t_map **map_vertical(int column,t_map *list);
+void push_back_verticals(t_map *node, t_map **vertical);
+int get_columns(t_map *dot_map);
+int get_rows(t_map *dot_map);
+t_map *map_duplicate(t_map *map);

@@ -51,6 +51,7 @@ int main (int ac, char **av)
 		vertical = process_map_vertical_lines(horizontal);
 		lineate_horizontal(horizontal, gui);
 		lineate_vertical(vertical, gui);
+		mlx_key_hook(gui.win, gui.mlx, keyboard, )
 		mlx_loop(gui.mlx);
 	}
 	return 0;
