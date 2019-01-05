@@ -6,13 +6,14 @@
 #    By: rsathiad <3kiraj@gmail.com>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/16 02:32:39 by rsathiad          #+#    #+#              #
-#    Updated: 2018/12/28 12:10:43 by rsathiad         ###   ########.fr        #
+#    Updated: 2019/01/04 12:34:53 by rsathiad         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 OBJ = *.o
 
-fdfSRC = src/fdf.c src/line.c src/map_builder.c src/builder_util.c
+fdfSRC = src/fdf.c src/line.c src/map_builder.c src/builder_util.c src/hook.c \
+src/hook_util.c
 
 fdfHDR = includes/fdf.h
 

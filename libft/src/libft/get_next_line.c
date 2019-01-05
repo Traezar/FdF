@@ -50,7 +50,7 @@ int		get_next_line(const int fd, char **line)
 	{
 		buf[ret] = '\0';
 		if (!(fdlist[fd]))
-			fdlist[fd] = ft_strnew(1);
+			fdlist[fd] = ft_strnew(0);
 		tmp = ft_strjoin(fdlist[fd], buf);
 		free(fdlist[fd]);
 		fdlist[fd] = tmp;

@@ -176,7 +176,7 @@ char				*ft_intmaxtoa_base(intmax_t num, unsigned int base,
 					int is_cap);
 char				*ft_ltoa_base(long num, unsigned int base, int is_cap);
 int					ft_getarraylen(char **array);
-void				ft_free_dblarray(char ***g_env);
+void				ft_free_dblarray(char **list);
 char				**ft_split_whitespace(char *str);
 char				**ft_split_args_in_line(char *line);
 int					ft_count_char(char c, char *str);

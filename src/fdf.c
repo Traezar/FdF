@@ -6,7 +6,7 @@
 /*   By: rsathiad <3kiraj@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/16 03:23:17 by rsathiad          #+#    #+#             */
-/*   Updated: 2018/12/16 03:24:03 by rsathiad         ###   ########.fr       */
+/*   Updated: 2019/01/03 15:47:48 by rsathiad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,83 +16,71 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-t_map *set_origin (void)
+int		main(int ac, char **av)
 {
-	t_map *origin;
+	int		fd;
+	t_fdf	*fdf;
 
-	origin = malloc(sizeof(t_map));
-	origin->cart.x = 900;
-	origin->cart.y = 900;
-	origin->iso.x = 900;
-	origin->iso.y = 900;
-	return (origin);
-}
-
-int main (int ac, char **av)
-{
-	int fd;
-	t_gui gui;
-	t_map *horizontal;
-	t_map **vertical;
-
-	if(ac != 2)
+	if (ac != 2)
 		exit(0);
-	gui.win = NULL;
+	fdf = malloc(sizeof(t_fdf));
 	fd = open(av[1], O_RDONLY);
 	if (fd == -1)
 		ft_printf("Error opening the file provided");
 	else
 	{
-		gui.mlx = mlx_init();
-		if (gui.mlx != NULL)
-			gui.win = mlx_new_window(gui.mlx, 5000, 5000, "FDF");
-		gui.origin = set_origin();
-		horizontal = process_map_horizontal_lines(fd, gui.origin);
-		vertical = process_map_vertical_lines(horizontal);
-		lineate_horizontal(horizontal, gui);
-		lineate_vertical(vertical, gui);
-		mlx_key_hook(gui.win, gui.mlx, keyboard, )
-		mlx_loop(gui.mlx);
+		fdf->mlx = mlx_init();
+		get_rows_columns(av[1], fdf);
+		set_unit(fdf);
+		fdf->win = mlx_new_window(fdf->mlx, 5000, 5000, "FDF");
+		set_origin(fdf);
+		fdf->horizontal = process_map_horizontal_lines(fd, fdf);
+		fdf->vertical = process_map_vertical_lines(fdf->horizontal);
+		lineate_horizontal(fdf->horizontal, fdf);
+		lineate_vertical(fdf->vertical, fdf);
+		mlx_key_hook(fdf->win, keyboard, fdf);
+		mlx_loop(fdf->mlx);
+		free_fdf(&fdf);
 	}
-	return 0;
+	return (0);
 }
 
-void lineate_horizontal(t_map *horizontal, t_gui gui)
+void	lineate_horizontal(t_map *horizontal, t_fdf *fdf)
 {
-  t_map *hcurrent;
-  t_map *hprevious;
+	t_map	*hcurrent;
+	t_map	*hprevious;
 
-	hcurrent = gui.origin;
+	hcurrent = horizontal;
 	hprevious = NULL;
-  while(horizontal!= NULL)
-  {
+	while (horizontal != NULL)
+	{
 		hprevious = hcurrent;
 		hcurrent = horizontal;
-		if(hcurrent->cart.y == hprevious->cart.y)
-		drawline_bresenham(hprevious,hcurrent ,gui);
+		if (hcurrent->cart->y == hprevious->cart->y)
+			drawline_bresenham(hprevious, hcurrent, fdf);
 		horizontal = horizontal->next;
-  }
-	return;
+	}
+	return ;
 }
 
-void lineate_vertical(t_map **vertical, t_gui gui)
+void	lineate_vertical(t_map **vertical, t_fdf *fdf)
 {
 	t_map *vcurrent;
-  t_map *vprevious;
+	t_map *vprevious;
 
 	vcurrent = NULL;
 	vprevious = NULL;
-	while(*vertical != NULL)
+	while (*vertical != NULL)
 	{
 		vcurrent = *vertical;
 		vprevious = NULL;
-		while(vcurrent->next != NULL && *vertical != NULL)
+		while (vcurrent->next != NULL && *vertical != NULL)
 		{
 			vprevious = vcurrent;
 			vcurrent = vcurrent->next;
-			drawline_bresenham(vprevious,vcurrent ,gui);
+			drawline_bresenham(vprevious, vcurrent, fdf);
 		}
 		vertical++;
 	}
-	return;
+	return ;
 }

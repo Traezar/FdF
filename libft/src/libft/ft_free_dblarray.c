@@ -12,7 +12,7 @@
 
 #include "../../includes/libft.h"
 
-void	ft_free_dblarray(char ***array)
+void	ft_free_dblarray(char **array)
 {
 	int		i;
 	char	**list;
@@ -20,7 +20,7 @@ void	ft_free_dblarray(char ***array)
 	i = 0;
 	if (!array)
 		return ;
-	list = *array;
+	list = array;
 	while (list[i] != NULL)
 	{
 		free(list[i]);
